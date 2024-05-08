@@ -36,7 +36,6 @@ async function findUserCart(userId) {
 
         return cart;
     } catch (error) {
-        console.log('error', error);
         throw new Error(error.message);
     }
 }

@@ -108,7 +108,6 @@ async function usersOrderHistory(userId) {
 
         return orders
     } catch (error) {
-        console.log('error', error);
         throw new Error(error.message)
     }
 }
