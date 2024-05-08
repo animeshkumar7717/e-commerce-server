@@ -16,7 +16,6 @@ const addItemToCart = async(req,res) => {
         const cartItem = await cartService.addCartItem(user._id, req.body);
         return res.status(200).send(cartItem);
     } catch (error) {
-        console.log('error', error);
         return res.status(500).send({ error: error.message });
     }
 }
