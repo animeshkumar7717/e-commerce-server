@@ -18,7 +18,7 @@ const orderItemSchema = new Schema({
         type:Number,
         required:true
     },
-    discountPrice:{
+    discountedPrice:{
         type:Number,
         required:true
     },

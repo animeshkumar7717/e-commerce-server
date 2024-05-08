@@ -1,7 +1,7 @@
 const cartItemService = require('../services/cartItems.service');
 
 const updateCartItem = async(req,res)=>{
-    const user = req.user;
+    const user = await req.user;
     try {
         const updateCartItem = await cartItemService.updateCartItem(user._id, req.params, req.body);
         return res.status(200).send(updateCartItem);
@@ -11,7 +11,8 @@ const updateCartItem = async(req,res)=>{
 }
 
 const removeCartItem = async(req,res)=>{
-    const user = req.user;
+    const user = await req.user;
+    console.log('user', user);
     try {
         await cartItemService.removeCartItem(user._id, req.params.id);
         return res.status(200).send({

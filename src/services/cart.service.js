@@ -16,60 +16,57 @@ async function createCart(user) {
 async function findUserCart(userId) {
     try {
         let cart = await Cart.findOne({user: userId});
-        const cartItems = await CartItem.find({cart:cart._id})
-        .populate('product');
+        const cartItems = await CartItem.find({cart: cart._id}).populate('product');
 
-        cart.cartItems=cartItems
+        cart.cartItems = cartItems;
 
-        let totalPrice=0;
-        let totalDiscountedPrice=0;
-        let totalItem=0;
+        let totalPrice = 0;
+        let totalDiscountedPrice = 0;
+        let totalItem = 0;
 
-        for(let cartItem of cart.cartItem){
-            totalPrice+=cartItem.price;
-            totalDiscountedPrice+=cartItem.discountedPrice;
-            totalItem+=cartItem.quantity;
+        for (let cartItem of cart.cartItems) {
+            totalPrice += cartItem.price;
+            totalDiscountedPrice += cartItem.discountedPrice;
+            totalItem += cartItem.quantity;
         }
 
-        cart.totalPrice=totalPrice;
-        cart.totalItem=totalItem;
-        cart.discount=totalPrice-totalDiscountPrice;
+        cart.totalPrice = totalPrice;
+        cart.totalItem = totalItem;
+        cart.discount = totalPrice - totalDiscountedPrice;
 
-        return cart
-
+        return cart;
     } catch (error) {
-        console.log('error', error);
-        throw new Error(error.message)
+        throw new Error(error.message);
     }
 }
 
-async function addCartItem (userId, req){
+async function addCartItem(userId, req){
     try {
         const cart = await Cart.findOne({ user: userId });
         const product = await Product.findById(req.productId);
 
-        const isPresent= await CartItem.findOne({cart:cart._id, product:product._id, userId});
+        const isPresent = await CartItem.findOne({ cart: cart._id, product: product._id, userId });
 
-        if(!isPresent) {
+        if (!isPresent) {
             const cartItem = new CartItem({
                 product: product._id,
                 cart: cart._id,
-                quantity:1,
+                quantity: 1,
                 userId,
-                price:product.price,
-                size:req.size,
-                discountedPrice:product.discountedPrice
-            })
+                price: product.price,
+                size: req.size,
+                discountedPrice: product.discountedPrice
+            });
+            const createdCartItem = await cartItem.save();
+            cart.cartItems.push(createdCartItem);
+            await cart.save();
+            return "Item Added to Cart!"
+        } else {
+            return "Item already present in Cart!";
         }
-
-        const createdCartItem = await cartItem.save();
-        cart.cartItems.push(createdCartItem);
-        await cart.save();
-        return "Item Added to Cart!"
-        
     } catch (error) {
         console.log('error', error);
-        throw new Error(error.message)
+        throw new Error(error.message);
     }
 }
 
