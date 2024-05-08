@@ -3,9 +3,9 @@ const productService = require('../services/product.service');
 const createProduct = async(req,res) => {
     try {
         const product = await productService.createProduct(req.body);
-        return res.send(201).send(product);
+        return res.status(201).send(product);
     } catch (error) {
-        return res.send(500).send({error: error.message});
+        return res.status(500).send({error: error.message});
     }
 }
 
@@ -33,9 +33,9 @@ const findProductById = async(req,res) => {
     const productId = req.params.id;
     try {
         const product = await productService.findProductById(productId);
-        return res.send(201).send(product);
+        return res.status(200).send(product);
     } catch (error) {
-        return res.send(500).send({error: error.message});
+        return res.status(500).send({error: error.message});
     }
 }
 
@@ -43,9 +43,11 @@ const getAllProducts = async(req,res) => {
     const productId = req.params.id;
     try {
         const product = await productService.getAllProduct(req.query);
-        return res.send(201).send(product);
+        console.log('product', product);
+        return res.status(200).send(product);
     } catch (error) {
-        return res.send(500).send({error: error.message});
+        console.log('error', error);
+        return res.status(500).send({error: error.message});
     }
 }
 
