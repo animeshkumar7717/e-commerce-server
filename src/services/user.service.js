@@ -13,7 +13,6 @@ const createUser = async(userDate) => {
 
         const user = await User.create({firstName, lastName, email, password});
 
-        console.log('user created!', user);
         return user
     } catch (error) {
         throw new Error(error.message);

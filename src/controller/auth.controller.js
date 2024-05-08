@@ -24,9 +24,7 @@ const register = async(req,res) => {
 const login = async(req,res) => {
     try {
         const {password, email} = req.body;
-        console.log('pass', password, 'email', email);
         const user = await userService.getUserByEmail(email);
-        console.log('user', user);
         if(!user) {
             return res.status(404).send({
                 message: 'user not found with email: ', email

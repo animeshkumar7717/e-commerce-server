@@ -65,7 +65,6 @@ async function addCartItem(userId, req){
             return "Item already present in Cart!";
         }
     } catch (error) {
-        console.log('error', error);
         throw new Error(error.message);
     }
 }
