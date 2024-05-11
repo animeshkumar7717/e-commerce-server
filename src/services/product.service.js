@@ -36,7 +36,7 @@ async function createProduct(reqData) {
         color: reqData.color,
         description: reqData.description,
         discountedPrice: reqData.discountedPrice,
-        discountedPersent: reqData.discountedPersent,
+        discountPersent: reqData.discountPersent,
         imageUrl: reqData.imageUrl,
         brand: reqData.brand,
         price: reqData.price,
@@ -82,7 +82,7 @@ async function getAllProduct(reqQuery) {
         pageSize 
     } = reqQuery;
 
-    pageSize=pageSize||10;
+    pageSize=pageSize||12;
 
     let query = Product.find().populate("category");
 
@@ -108,10 +108,14 @@ async function getAllProduct(reqQuery) {
         query.query.where("sizes.name").in([...sizesSet])
     }
 
-    if(minPrice && maxPrice) {
+    // if(minPrice && maxPrice) {
+    //     query = query.where('discountedPrice').gte(minPrice).lte(maxPrice)
+    // }
+    
+    if (minPrice > 0 && maxPrice > 0) {
         query = query.where('discountedPrice').gte(minPrice).lte(maxPrice)
     }
-
+    
     if(minDiscount) {
         query = query.where('discountedPersent').gt(minDiscount);
     }

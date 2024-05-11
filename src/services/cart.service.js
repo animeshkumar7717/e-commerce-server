@@ -29,10 +29,11 @@ async function findUserCart(userId) {
             totalDiscountedPrice += cartItem.discountedPrice;
             totalItem += cartItem.quantity;
         }
-
         cart.totalPrice = totalPrice;
         cart.totalItem = totalItem;
+        cart.totalDiscountedPrice = totalDiscountedPrice;
         cart.discount = totalPrice - totalDiscountedPrice;
+        cart.totalDiscountPrice = cart.totalPrice - cart.discount;
 
         return cart;
     } catch (error) {

@@ -23,6 +23,10 @@ const orderSchema = new Schema({
         type:mongoose.Types.ObjectId,
         ref:'addresses'
     },
+    // shippedAddress: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Address'
+    // },
     paymentDetails:{
         paymentMethod:{
             type:String
