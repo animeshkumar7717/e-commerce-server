@@ -3,72 +3,18 @@ const Order = require('../models/order.model');
 const OrderItem = require('../models/orderItems.model');
 const cartService = require('../services/cart.service');
 
-// async function createOrder(user, shippedAddress) {
-//     let address;
-//     if (shippedAddress._id) {
-//         let isExistsAddress = await Address.findById(shippedAddress._id);
-//         address = isExistsAddress
-//     } else {
-//         address = new Address(shippedAddress);
-//         address.user = user;
-//         await address.save();
-
-//         user.address.push(address);
-//         await user.save();
-//     }
-
-//     const cart = await cartService.findUserCart(user._id);
-//     const orderItems = [];
-
-//     for (const item of cart.cartItems) {
-//         const orderItem = new OrderItem({
-//             price: item.price,
-//             product: item.product,
-//             quantity: item.quantity,
-//             size: item.size,
-//             userId: item.userId,
-//             discountedPrice: item.discountedPrice,
-//         })
-//         const createdOrderItem = await orderItem.save();
-//         orderItems.push(createdOrderItem);
-//     }
-
-//     const createdOrder = new Order({
-//         user,
-//         orderItems,
-//         totalPrice: cart.totalPrice,
-//         totalDiscountedPrice: cart.totalDiscountPrice,
-//         discount: cart.discount,
-//         totalItem: cart.totalItem,
-//         shippedAddress: address
-//     })
-
-//     const savedOrder = await createdOrder.save();
-//     return savedOrder;
-
-// }
-
 async function createOrder(user, shippedAddress) {
     let address;
-
     if (shippedAddress._id) {
-        // If shippedAddress is an ID, fetch the address details
-        address = await Address.findById(shippedAddress._id);
+        let isExistsAddress = await Address.findById(shippedAddress._id);
+        address = isExistsAddress
     } else {
-        // If shippedAddress is already an address object, use it directly
         address = new Address(shippedAddress);
         address.user = user;
+        await address.save();
 
-        try {
-            // Save the address object
-            address = await address.save();
-
-            // Update user's address list
-            user.address.push(address);
-            await user.save();
-        } catch (error) {
-            throw new Error("Error saving address: " + error.message);
-        }
+        user.address.push(address);
+        await user.save();
     }
 
     const cart = await cartService.findUserCart(user._id);
@@ -90,13 +36,12 @@ async function createOrder(user, shippedAddress) {
     const createdOrder = new Order({
         user,
         orderItems,
-        totalPrice: cart.totalPrice,
+        totalPrice: cart.totalPrice,    
         totalDiscountedPrice: cart.totalDiscountPrice,
         discount: cart.discount,
         totalItem: cart.totalItem,
-        shippedAddress: address
-    });
-
+        shippingAddress: address 
+    })
     const savedOrder = await createdOrder.save();
     return savedOrder;
 }
