@@ -75,13 +75,12 @@ async function getAllProduct(reqQuery) {
         sizes, 
         minPrice, 
         maxPrice, 
-        minDiscount, 
+        mindiscount, 
         sort, 
         stock, 
         pageNumber, 
         pageSize 
     } = reqQuery;
-
     pageSize=pageSize||12;
 
     let query = Product.find().populate("category");
@@ -104,16 +103,19 @@ async function getAllProduct(reqQuery) {
     }
 
     if(sizes) {
-        const sizesSet = new Set(sizes);
-        query.query.where("sizes.name").in([...sizesSet])
+        const sizesArray = sizes.split(',').map(size => size.trim());
+        query = query.where("sizes.name").in([...sizesArray]);
+    } else if (reqQuery.size) {
+        query = query.where("sizes.name").equals(reqQuery.size);
     }
+    
     
     if (minPrice > 0 && maxPrice > 0) {
         query = query.where('discountedPrice').gte(minPrice).lte(maxPrice)
     }
     
-    if(minDiscount) {
-        query = query.where('discountedPersent').gt(minDiscount);
+    if(mindiscount) {
+        query = query.where('discountPersent').gt(mindiscount);
     }
 
     if(stock) {
