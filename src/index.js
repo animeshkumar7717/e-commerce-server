@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/auth', authRouters);
-app.use('/api/users', userRouters); // working 
+app.use('/api/users', userRouters);  
 app.use('/api/product', productRouters);    
 app.use('/api/admin/product', adminProductRouters);
 app.use('/api/cart', cartRouters);

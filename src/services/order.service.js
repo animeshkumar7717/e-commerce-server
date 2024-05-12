@@ -28,7 +28,7 @@ async function createOrder(user, shippedAddress) {
             size: item.size,
             userId: item.userId,
             discountedPrice: item.discountedPrice,
-        })
+        });
         const createdOrderItem = await orderItem.save();
         orderItems.push(createdOrderItem);
     }
@@ -36,16 +36,14 @@ async function createOrder(user, shippedAddress) {
     const createdOrder = new Order({
         user,
         orderItems,
-        totalPrice: cart.totalPrice,
+        totalPrice: cart.totalPrice,    
         totalDiscountedPrice: cart.totalDiscountPrice,
         discount: cart.discount,
         totalItem: cart.totalItem,
-        shippedAddress: address
+        shippingAddress: address 
     })
-
     const savedOrder = await createdOrder.save();
     return savedOrder;
-
 }
 
 /**
@@ -97,7 +95,6 @@ async function findOrderById(orderId) {
         .populate("user")
         .populate({ path: "orderItems", populate: { path: "product" } })
         .populate("shippingAddress")
-
     return order
 }
 

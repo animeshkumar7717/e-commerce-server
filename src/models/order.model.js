@@ -40,7 +40,8 @@ const orderSchema = new Schema({
     },
     discount:{
         type:Number,
-        required:true
+        required:true,
+        default:0
     },
     orderStatus:{
         type:String,
@@ -49,7 +50,18 @@ const orderSchema = new Schema({
     },
     totalItem:{
         type:Number,
-        required:true
+        required:true,
+        default:0
+    },
+    totalPrice:{
+        type:Number,
+        required:true,
+        default:0
+    },
+    totalDiscountedPrice:{
+        type:Number,
+        required:true,
+        default:0
     },
     createdAt:{
         type:Date,
